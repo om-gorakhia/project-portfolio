@@ -1,0 +1,115 @@
+key: product-category-mapping
+title: Product–Category Mapping Model
+summary: Automates product-to-category mapping using multi-stage keyword matching, AI fallback, and RPA for exceptions.
+objectives:
+  - Standardize product-to-category assignments across datasets
+  - Reduce manual intervention and improve accuracy
+  - Ensure 100% coverage with AI/RPA fallback
+  - Create scalable pipeline for diverse input sources
+tags: [NLP, Mapping, AI, RPA, Data-Engineering]
+pipeline:
+  - name: Data Ingestion
+    details:
+      - Excel/CSV files from business units, API feeds, PowerApps submissions
+      - Initial cleaning - remove nulls, trim whitespace, standardize case, normalize special characters
+      - Load data into staging area for processing
+  - name: Preprocessing & Standardization
+    details:
+      - Standardize product names using base CN actions (clean, trim, propercase, lowercase)
+      - Apply normalization rules for abbreviations, typos, synonyms
+      - Flag incomplete or ambiguous entries for further processing
+  - name: Keyword Matching Layer (Primary Mapping)
+    details:
+      - Exact Match - direct comparison of product names to category keywords
+      - Fuzzy Matching - Levenshtein distance for minor spelling variations
+      - Partial/Substring Matching - identify products containing category keywords
+      - Synonym Mapping - leverage synonym dictionary (laptop = notebook)
+      - Weighted Multi-Keyword Matching - score based on keyword frequency and hits
+  - name: AI Integration via PowerApps
+    details:
+      - Send unmatched products to AI-powered categorization module
+      - Azure AI/Power Platform AI Builder predictions with confidence scores
+      - Continuous training on historical product-category pairs
+      - Low-confidence predictions flagged for manual review
+  - name: RPA Bot for Exception Handling
+    details:
+      - Triggered when AI confidence below threshold or verification needed
+      - Search internal databases/knowledge bases for product information
+      - Cross-reference historical mappings, update staging table
+      - Flag for human validation, ensure 100% coverage
+  - name: Consolidation & Validation
+    details:
+      - Merge results from keyword matching, AI predictions, RPA outputs
+      - Apply validation rules - one product per category, respect hierarchies
+      - Category levels (Level 1 → Level 2 → Level 3) validation
+      - Flag confidence scores below threshold for manual audit
+  - name: Master File Generation
+    details:
+      - Generate standardized master product-category mapping file
+      - Include Product_ID, Product_Name, Category levels, Mapping_Flag
+      - Add Confidence_Score, Mapping_Source, Last_Updated, Remarks
+  - name: Automation & Maintenance
+    details:
+      - Schedule entire pipeline for batch runs via PowerApps/Power Automate
+      - Periodic AI model retraining using newly validated mappings
+      - Maintain logging and audit trails for pipeline execution and errors
+tools:
+  - Python (pandas, fuzzywuzzy, rapidfuzz)
+  - SQL/Local DB
+  - PowerApps / AI Builder
+  - UiPath / Power Automate
+  - Excel/CSV
+impact:
+  - Automation Efficiency - Reduced manual mapping by over 85%
+  - Accuracy Improvement - Multi-layer approach across datasets
+  - Scalability & Resiliency - AI+RPA fallback ensured coverage
+  - Knowledge Capture - Generated datasets for continuous improvement
+visuals:
+  - title: Coverage by Mapping Source
+    description: Share of products mapped by Keyword, AI, RPA over time.
+    type: bar
+    data_path: data/visuals/product_category/keyword_vs_ai_coverage.csv
+    x: period
+    y: value
+    color: source
+  - title: Accuracy Over Time
+    description: Accuracy trend before vs after pipeline deployment.
+    type: line
+    data_path: data/visuals/product_category/accuracy_over_time.csv
+    x: period
+    y: accuracy
+    color: phase
+downloads:
+  - label: Master Mapping Sample
+    path: data/visuals/product_category/sample_master_output.csv
+diagram:
+  type: flow
+  nodes:
+    - Input Files (Excel/CSV/API)
+    - Data Preprocessing & Cleaning
+    - Keyword Matching Layer
+    - Exact Match
+    - Fuzzy Match
+    - Partial Match
+    - Synonym Match
+    - AI Model in PowerApps
+    - Confidence Check
+    - RPA Bot (Exceptions)
+    - Consolidation & Validation
+    - Master Product-Category File
+  edges:
+    - [Input Files (Excel/CSV/API), Data Preprocessing & Cleaning]
+    - [Data Preprocessing & Cleaning, Keyword Matching Layer]
+    - [Keyword Matching Layer, Exact Match]
+    - [Keyword Matching Layer, Fuzzy Match]
+    - [Keyword Matching Layer, Partial Match]
+    - [Keyword Matching Layer, Synonym Match]
+    - [Exact Match, AI Model in PowerApps]
+    - [Fuzzy Match, AI Model in PowerApps]
+    - [Partial Match, AI Model in PowerApps]
+    - [Synonym Match, AI Model in PowerApps]
+    - [AI Model in PowerApps, Confidence Check]
+    - [Confidence Check, RPA Bot (Exceptions)]
+    - [Confidence Check, Consolidation & Validation]
+    - [RPA Bot (Exceptions), Consolidation & Validation]
+    - [Consolidation & Validation, Master Product-Category File]

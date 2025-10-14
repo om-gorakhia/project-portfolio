@@ -1,0 +1,74 @@
+# data/projects/bento_b_restaurant_trends.yaml
+key: bento-b-restaurant-trends
+title: Bento B – Restaurant Trend Analysis
+summary: Analyzes customer feedback, transactions, and operations for actionable insights on sentiment, personas, and menu performance.
+objectives:
+  - Extract sentiment from feedback and reviews
+  - Identify customer personas via clustering
+  - Analyze revenue, visits, and item trends
+  - Deliver use-case dashboards for management decisions
+tags: [NLP, Sentiment, Clustering, Time-Series, BI]
+pipeline:
+  - name: Data Ingestion
+    details:
+      - Feedback surveys, POS logs, loyalty DB, online reviews
+      - Clean HTML tags, normalize case, merge sources, dedupe
+  - name: Use Case Definition
+    details:
+      - Sentiment Analysis, Persona Identification, Revenue/Visit Trends, Menu Analysis
+  - name: Sentiment & NLP
+    details:
+      - Tokenize, lemmatize, VADER & ML classifiers, categorize sentiment
+  - name: Customer Persona Clustering
+    details:
+      - K-Means/Hierarchical on visits, spend, preferences, sentiment
+  - name: Trend & Statistical Analysis
+    details:
+      - Time-series decomposition, revenue/visits stats, correlation, regression, Pareto
+  - name: Dashboard Generation
+    details:
+      - Output datasets for dashboards (sentiment, personas, trends, menu performance)
+tools:
+  - Python (pandas, numpy, scikit-learn, NLTK, spaCy, VADER)
+  - SQL / Cloud DB
+  - Power BI / Tableau
+impact:
+  - Data-driven sentiment insights for service improvements
+  - Targeted personas for personalized marketing
+  - Optimized staffing and inventory via trend analysis
+  - Menu performance insights for strategic updates
+visuals:
+  - title: Sentiment Over Time
+    description: Feedback sentiment by month.
+    type: line
+    data_path: data/visuals/bento_b_restaurant_trends/sentiment_over_time_long.csv
+    x: month
+    y: share
+    color: sentiment_category
+
+  - title: Trend Pattern Counts
+    description: Count of HL/LH/LHL/HLH/C patterns across metrics.
+    type: bar
+    data_path: data/visuals/bento_b_restaurant_trends/trend_classification.csv
+    x: trend_pattern
+    y: month  # temporary placeholder
+    color: trend_pattern
+
+diagram:
+  type: flow
+  nodes:
+    - Customer Feedback & POS Data
+    - Data Cleaning & Preprocessing
+    - Use Case Segmentation
+    - Sentiment Analysis (NLP)
+    - Customer Persona Clustering
+    - Statistical & Trend Analysis
+    - Dashboard & Visualization
+  edges:
+    - [Customer Feedback & POS Data, Data Cleaning & Preprocessing]
+    - [Data Cleaning & Preprocessing, Use Case Segmentation]
+    - [Use Case Segmentation, Sentiment Analysis (NLP)]
+    - [Use Case Segmentation, Customer Persona Clustering]
+    - [Sentiment Analysis (NLP), Dashboard & Visualization]
+    - [Customer Persona Clustering, Dashboard & Visualization]
+    - [Statistical & Trend Analysis, Dashboard & Visualization]

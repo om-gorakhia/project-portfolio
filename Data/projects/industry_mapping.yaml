@@ -1,0 +1,106 @@
+key: industry-mapping
+title: Leads to Industry Mapping Model
+summary: Classifies entities into hierarchical industry categories using keyword layers and AI fallback.
+objectives:
+  - Standardize industry assignments across multiple datasets
+  - Reduce manual effort and improve mapping accuracy
+  - Handle ambiguous/unmatched entities using AI-based classification
+  - Support hierarchical industry classification (Sector → Sub-sector → Industry)
+tags: [NLP, Mapping, AI, Hierarchy]
+pipeline:
+  - name: Data Ingestion
+    details:
+      - Excel/CSV lists, CRM extracts, internal databases as input sources
+      - Initial preprocessing - remove nulls, normalize text (case, whitespace, special characters)
+      - Load into staging area for mapping
+  - name: Preprocessing & Standardization
+    details:
+      - Standardize company/entity names using base CN actions (trim, clean, lowercase, propercase)
+      - Normalize common abbreviations and variations (Ltd. = Limited)
+      - Flag entities with missing key information for downstream handling
+  - name: Keyword Matching Layer (Primary Mapping)
+    details:
+      - Exact Match - entity names/descriptions matched directly with industry master keywords
+      - Partial/Substring Match - detect if entity names contain key industry-related terms
+      - Fuzzy Matching - Levenshtein distance for spelling errors
+      - Synonym/Alias Mapping - alternate terms (Apparel = Clothing)
+      - Weighted Multi-Keyword Matching - score and aggregate keyword hits
+  - name: Hierarchical Mapping
+    details:
+      - Assign entities to industry hierarchy after initial keyword matching
+      - Level 1 - Sector (Technology, Healthcare)
+      - Level 2 - Sub-sector (Software, Biotech)
+      - Level 3 - Industry (SaaS, Pharmaceuticals)
+      - Ensure all assignments respect parent-child relationships
+  - name: AI Integration (Fallback)
+    details:
+      - Send entities failing keyword/fuzzy matching to AI-based classification
+      - Train on historical entity-to-industry mappings
+      - Generate predicted industry labels with confidence scores
+      - Flag low-confidence predictions for RPA or human validation
+  - name: Consolidation & Validation
+    details:
+      - Combine results from keyword matching and AI predictions
+      - Only one industry per entity unless multi-industry assignment allowed
+      - Check parent-level consistency (Level 3 aligns with Level 2 and Level 1)
+      - Flag confidence scores below threshold for review
+  - name: Output Generation
+    details:
+      - Generate master industry-mapping file
+      - Include Entity_ID, Entity_Name, Sector, Sub_sector, Industry
+      - Add Mapping_Flag, Confidence_Score, Mapping_Source, Last_Updated, Remarks
+  - name: Automation & Maintenance
+    details:
+      - Integrate pipeline with PowerApps for UI and batch updates
+      - Periodically retrain AI model with newly validated mappings
+      - Maintain logging for each step including unmatched entities and AI predictions
+tools:
+  - Python (pandas, fuzzy matching)
+  - PowerApps / AI Builder
+  - SQL / Local DB
+  - Excel/CSV
+impact:
+  - Efficiency - Manual effort reduced by >80%
+  - Accuracy - Improved classification across diverse entity types
+  - Scalability & Resiliency - AI fallback + hierarchy rules
+  - Knowledge Capture - Feed mappings into AI retraining and synonym updates
+visuals:
+  - title: Coverage vs Confidence
+    description: Distribution of mapped entities by confidence bucket.
+    type: bar
+    data_path: data/visuals/industry_mapping/coverage_confidence.csv
+    x: confidence_bucket
+    y: count
+    color: method
+downloads:
+  - label: Master Industry Mapping Sample
+    path: data/visuals/industry_mapping/sample_master_output.csv
+diagram:
+  type: flow
+  nodes:
+    - Input Data (Excel/CSV/CRM)
+    - Preprocessing & Standardization
+    - Keyword Matching Layer
+    - Exact Match
+    - Partial Match
+    - Fuzzy Match
+    - Synonym Mapping
+    - Hierarchical Mapping
+    - AI Integration (Fallback)
+    - Consolidation & Validation
+    - Master Industry-Mapping File
+  edges:
+    - [Input Data (Excel/CSV/CRM), Preprocessing & Standardization]
+    - [Preprocessing & Standardization, Keyword Matching Layer]
+    - [Keyword Matching Layer, Exact Match]
+    - [Keyword Matching Layer, Partial Match]
+    - [Keyword Matching Layer, Fuzzy Match]
+    - [Keyword Matching Layer, Synonym Mapping]
+    - [Exact Match, Hierarchical Mapping]
+    - [Partial Match, Hierarchical Mapping]
+    - [Fuzzy Match, Hierarchical Mapping]
+    - [Synonym Mapping, Hierarchical Mapping]
+    - [Hierarchical Mapping, AI Integration (Fallback)]
+    - [AI Integration (Fallback), Consolidation & Validation]
+    - [Hierarchical Mapping, Consolidation & Validation]
+    - [Consolidation & Validation, Master Industry-Mapping File]
