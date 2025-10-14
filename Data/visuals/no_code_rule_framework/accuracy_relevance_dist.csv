@@ -1,0 +1,9 @@
+accuracy_bucket,relevance_bucket,count
+0-0.5,Low,50
+0.5-0.7,Low,120
+0.7-0.9,Low,200
+0.9-1.0,Low,80
+0-0.5,High,70
+0.5-0.7,High,150
+0.7-0.9,High,220
+0.9-1.0,High,90

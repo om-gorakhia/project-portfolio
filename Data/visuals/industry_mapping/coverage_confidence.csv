@@ -1,0 +1,7 @@
+confidence_bucket,method,count
+0-0.5,AI,180
+0.5-0.8,AI,620
+0.8-1.0,Keyword,2100
+0-0.5,Keyword,45
+0.5-0.8,AI,890
+0.8-1.0,Keyword,3200

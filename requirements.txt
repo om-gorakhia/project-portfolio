@@ -1,0 +1,8 @@
+streamlit
+pandas
+pyyaml
+plotly
+altair
+networkx
+pyvis
+matplotlib

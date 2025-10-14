@@ -1,0 +1,72 @@
+key: gms-model
+title: GMS (Gross Merchandise Sales) Model
+summary: Dynamically segments e-commerce markets and performs revenue estimation across platforms via automated ingestion, ML clustering, and scoring.
+objectives:
+  - Ingest and standardize multi-platform e-commerce data
+  - Automate feature engineering for segmentation metrics
+  - Apply ML clustering (K-Means, hierarchical) with dynamic weighting
+  - Deliver end-to-end orchestrated pipeline in n8n
+tags: [n8n, ML, Clustering, E-Commerce, Automation]
+pipeline:
+  - name: Data Ingestion (n8n)
+    details:
+      - Shopify, BigCommerce, Wix, Magento connectors; API paging; schema normalization
+  - name: Preprocessing & Standardization
+    details:
+      - Revenue→USD, date/timezones, store type, dedupe, missing value handling
+  - name: Feature Engineering
+    details:
+      - AOV, repeat rate, growth rate, sales velocity, geo and temporal features
+  - name: ML-Based Segmentation
+    details:
+      - K-Means/Hierarchical clustering; dynamic feature weighting; cluster confidence
+  - name: Orchestration & Logging (n8n)
+    details:
+      - Scheduled ingestion, Python nodes for preprocessing and ML, retry logic, audit trails
+  - name: Output & Integration
+    details:
+      - Store_ID, Platform, Cluster_Tier, Confidence, Revenue/Growth/Engagement scores → SQL/Dashboard
+tools:
+  - n8n
+  - Python (scikit-learn, pandas, numpy)
+  - SQL / Cloud Storage
+  - Tableau / Power BI
+impact:
+  - Fully automated cross-platform segmentation
+  - 90%+ reduction in manual effort
+  - Data-driven tiers improved marketing targeting
+visuals:
+  - title: Revenue Distribution by Platform and Tier
+    description: Revenue generated across segments by platform, showing SKU count and price bucket insights.
+    type: bar
+    data_path: data/visuals/gms_model/cluster_distribution.csv
+    x: platform
+    y: revenue_q1_2025
+    color: cluster_tier
+  - title: SKU Count by Segment
+    description: Number of SKUs per cluster tier across platforms.
+    type: bar
+    data_path: data/visuals/gms_model/cluster_distribution.csv
+    x: cluster_tier
+    y: sku_count
+    color: avg_price_bucket
+downloads:
+  - label: Segmentation Output Sample
+    path: data/visuals/gms_model/sample_segments.csv
+diagram:
+  type: flow
+  nodes:
+    - Multi-Platform Data Sources
+    - n8n Ingestion Nodes
+    - Preprocessing & Standardization
+    - Feature Engineering
+    - ML Clustering & Tier Assignment
+    - Output Storage & Logging
+    - Dashboard / Downstream Systems
+  edges:
+    - [Multi-Platform Data Sources, n8n Ingestion Nodes]
+    - [n8n Ingestion Nodes, Preprocessing & Standardization]
+    - [Preprocessing & Standardization, Feature Engineering]
+    - [Feature Engineering, ML Clustering & Tier Assignment]
+    - [ML Clustering & Tier Assignment, Output Storage & Logging]
+    - [Output Storage & Logging, Dashboard / Downstream Systems]

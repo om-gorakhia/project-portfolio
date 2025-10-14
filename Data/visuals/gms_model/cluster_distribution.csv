@@ -1,0 +1,16 @@
+cluster_tier,platform,sku_count,avg_price_bucket,revenue_q1_2025
+Tier1,Shopify,1019,Low,2053
+Tier1,BigCommerce,1824,Low,9342
+Tier1,Wix,1773,High,1166
+Tier1,Magento,1155,Low,5793
+Tier1,Salesforce Commerce Cloud,1425,Low,9785
+Tier2,Shopify,1232,Mid,5304
+Tier2,BigCommerce,741,Low,6293
+Tier2,Wix,1914,Mid,1726
+Tier2,Magento,1599,Low,7993
+Tier2,Salesforce Commerce Cloud,597,Mid,6050
+Tier3,Shopify,886,Mid,6011
+Tier3,BigCommerce,1051,High,3849
+Tier3,Wix,612,Low,8619
+Tier3,Magento,1784,Mid,7481
+Tier3,Salesforce Commerce Cloud,689,Mid,9474

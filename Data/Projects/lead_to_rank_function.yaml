@@ -1,0 +1,117 @@
+key: rank-function
+title: Rank–Function Identification Model
+summary: Extracts rank (seniority) and function (domain) from titles using NLP + rules + AI fallback.
+objectives:
+  - Extract rank and function from text reliably
+  - Handle variations/ambiguity in titles
+  - Integrate AI fallback for edge cases beyond rule-based extraction
+  - Provide confidence scores and provenance
+tags: [NLP, Information-Extraction, AI]
+pipeline:
+  - name: Data Ingestion & Preprocessing
+    details:
+      - Sources - LinkedIn profiles, CRM datasets, employee lists
+      - Normalize text (lowercase, trim, remove special characters)
+      - Remove stopwords not relevant to rank/function (the, of)
+      - Tokenize text into words, bigrams, and trigrams
+      - POS tagging for nouns, proper nouns, verbs, adjectives relevant for ranks/functions
+  - name: Manual Keyword Matching & Rule-based Mapping
+    details:
+      - Rank Tokens (RT) - predefined list for seniority (CEO, VP, Director, Head, Manager)
+      - Function Tokens (FT) - predefined list for function/domain (Marketing, Finance, HR, Operations)
+      - Exact Token Match - matches title tokens to RT and FT lists
+      - Fuzzy Token Match - Levenshtein distance to handle minor typos
+      - Position-based Scoring - rank tokens before function tokens scored higher
+  - name: Distance Calculation
+    details:
+      - Calculate Distance (D_i) = number of words between rank token and each function token
+      - Use Minimum distance (D_min) to prioritize closest function to rank
+      - Apply distance-based weighting for better accuracy
+  - name: Scoring Mechanism
+    details:
+      - Distance Score (DS) - inversely proportional to token distance
+      - Function Token Score (FS) - weighted based on occurrence and contextual relevance
+      - Overall Score (OS) - combination of DS + FS to select most probable rank-function pair
+      - Threshold-based selection - top-scoring pair assigned, low-confidence flagged
+  - name: Contextual Refinements & Multi-Function Handling
+    details:
+      - Handle multiple functions within single title
+      - Apply rules to prioritize primary function
+      - Check against historical role-function mapping for consistency
+  - name: AI Integration (Fallback)
+    details:
+      - Send low-confidence OS, ambiguous tokens, unrecognized terms to AI-based prediction
+      - Use trained NLP model (transformer-based or Azure AI/PowerApps AI Builder)
+      - Input tokenized title, context phrases, historical mappings
+      - Output predicted rank and function with confidence scores
+      - Flag low-confidence AI predictions for manual review or RPA intervention
+  - name: Consolidation & Validation
+    details:
+      - Combine results from manual keyword matching and AI predictions
+      - Validate against known rank hierarchies (Director < VP < C-Level)
+      - Check function consistency with organizational domains
+      - Store OS, confidence, and source (Manual/AI) in final output table
+  - name: Output Generation
+    details:
+      - Generate final structured output table
+      - Include Entity_ID, Full_Title, Rank_Token, Function_Token
+      - Add Distance_Min, Distance_Score, Function_Score, Overall_Score
+      - Include Source (Manual, AI), Confidence_Score, Remarks
+  - name: Automation & Maintenance
+    details:
+      - Schedule pipeline for batch updates to handle new profile data
+      - Periodically update keyword lists and rules based on new titles
+      - Retrain AI on verified outputs to improve accuracy over time
+tools:
+  - Python (pandas)
+  - spaCy/NLTK (POS)
+  - fuzzywuzzy/rapidfuzz
+  - SQL/Local DB
+  - PowerApps / AI Builder
+impact:
+  - Automation - Structured extraction at scale from unstructured titles
+  - Accuracy - Multi-layer approach boosts precision/recall
+  - Scalability - Handle thousands of profiles with varying formats
+  - Resiliency - AI fallback for ambiguous titles
+  - Knowledge Capture - Refine keyword rules and retrain AI model
+visuals:
+  - title: Distance vs Overall Score
+    description: Relationship between token distance and OS on sample titles.
+    type: scatter
+    data_path: data/visuals/rank_function/title_distance_scoring_samples.csv
+    x: distance_min
+    y: overall_score
+    color: label
+downloads:
+  - label: Structured Output Sample
+    path: data/visuals/rank_function/sample_output.csv
+diagram:
+  type: flow
+  nodes:
+    - Raw Titles / LinkedIn Data
+    - Text Preprocessing & Tokenization
+    - Manual Keyword Matching
+    - Exact Token Match
+    - Fuzzy Token Match
+    - Position-based Scoring
+    - Distance Calculation
+    - Scoring Mechanism (DS + FS → OS)
+    - Contextual Refinements
+    - AI Integration (Fallback)
+    - Consolidation & Validation
+    - Structured Output
+  edges:
+    - [Raw Titles / LinkedIn Data, Text Preprocessing & Tokenization]
+    - [Text Preprocessing & Tokenization, Manual Keyword Matching]
+    - [Manual Keyword Matching, Exact Token Match]
+    - [Manual Keyword Matching, Fuzzy Token Match]
+    - [Manual Keyword Matching, Position-based Scoring]
+    - [Exact Token Match, Distance Calculation]
+    - [Fuzzy Token Match, Distance Calculation]
+    - [Position-based Scoring, Distance Calculation]
+    - [Distance Calculation, Scoring Mechanism (DS + FS → OS)]
+    - [Scoring Mechanism (DS + FS → OS), Contextual Refinements]
+    - [Contextual Refinements, AI Integration (Fallback)]
+    - [Contextual Refinements, Consolidation & Validation]
+    - [AI Integration (Fallback), Consolidation & Validation]
+    - [Consolidation & Validation, Structured Output]

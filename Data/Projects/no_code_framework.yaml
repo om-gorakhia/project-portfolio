@@ -1,0 +1,77 @@
+# data/projects/no_code_rule_framework.yaml
+key: no-code-rule-framework
+title: No-Code Query & Rule Framework & Scoring & QC Module
+summary: Enables non-technical users to define extraction, scoring, and QC rules without code, with accuracy and relevance scoring.
+objectives:
+  - Enable dynamic lead scoring with user-defined no-code rules
+  - Standardize accuracy checks and modular QC actions
+  - Evaluate relevance via context, recency, and activeness
+  - Provide transparent, scalable, low-maintenance data pipelines
+tags: [No-Code, Rule Engine, Scoring, QC, Data-Engineering]
+pipeline:
+  - name: Rule Definition & No-Code Input
+    details:
+      - UI for defining datapoint, class type, entities, operators, aggregation, score
+  - name: QC / CN Module (Preprocessing & Cleaning)
+    details:
+      - Trim, lowercase, propercase, dedupe, null-fill, split/merge, symbol removal
+  - name: Rule Execution & Condition Matching
+    details:
+      - Sequential rule parsing, AND/OR/List evaluation, score assignment
+  - name: Accuracy Scoring
+    details:
+      - Compare expected vs. actual SOW datapoints, compute Accuracy_Score
+  - name: Relevance Scoring
+    details:
+      - Polarity, recency, activeness factors → weighted Relevance_Score
+  - name: Lead Scoring Calculation
+    details:
+      - Combine Accuracy, Relevance, user rules → final Lead_Score
+  - name: Consolidation & Output
+    details:
+      - Log Matched_Rules, QC_Flags, Accuracy, Relevance, Lead_Score, timestamps
+  - name: Export & Integration
+    details:
+      - Outputs to CSV, dashboards, downstream systems
+tools:
+  - Python (pandas, custom rule engine)
+  - SQL / Local DB
+  - PowerApps / No-Code UI
+  - Excel / CSV
+impact:
+  - Empowered non-technical users to build scoring logic
+  - Standardized QC and scoring across datasets
+  - Improved lead prioritization and data quality
+visuals:
+  - title: Accuracy vs. Relevance Distribution
+    description: Lead counts by accuracy and relevance buckets.
+    type: bar
+    data_path: data/visuals/no_code_rule_framework/accuracy_relevance_dist.csv
+    x: accuracy_bucket
+    y: count
+    color: relevance_bucket
+downloads:
+  - label: Sample Scoring Output
+    path: data/visuals/no_code_rule_framework/sample_output.csv
+diagram:
+  type: flow
+  nodes:
+    - User-Defined Rules (No-Code UI)
+    - Incoming Dataset
+    - QC / CN Module
+    - Rule Engine Execution
+    - Accuracy Scoring
+    - Relevance Scoring
+    - Lead Scoring Calculation
+    - Consolidation & Output
+    - Export / Integration
+  edges:
+    - [User-Defined Rules (No-Code UI), Incoming Dataset]
+    - [Incoming Dataset, QC / CN Module]
+    - [QC / CN Module, Rule Engine Execution]
+    - [Rule Engine Execution, Accuracy Scoring]
+    - [Rule Engine Execution, Relevance Scoring]
+    - [Accuracy Scoring, Lead Scoring Calculation]
+    - [Relevance Scoring, Lead Scoring Calculation]
+    - [Lead Scoring Calculation, Consolidation & Output]
+    - [Consolidation & Output, Export / Integration]
